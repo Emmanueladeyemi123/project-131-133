@@ -1,5 +1,9 @@
 var img = "";
 var status="";
+leftWristX=0;
+leftWristY=0;
+rightWristX=0;
+rightWristY=0;
 function preload() {
    img = loadImage("dog_cat.jpg");
 }
@@ -10,7 +14,9 @@ function setup() {
 
    objectDetector = ml5.objectDetector('cocossd', modelLoaded);
    document.getElementById("status").innerHTML="Status: Detecting object";
-
+   
+    poseNet = ml5.poseNet(video, modelLoaded);
+    poseNet.on("pose", gotPoses);
 }
 
 function draw() {
@@ -37,4 +43,11 @@ function gotResult(error,results){
       console.log(error);
    }
    console.log(results);
+   if(results>=0){
+leftWristX=results[0].pose.leftWrist[0].x;
+leftWristY=results[0].pose.leftWrist[0].y;
+rightWristX=results[0].pose.rightWrist[0].x;
+rightWristY=results[0].pose.rightWrist[0].y;
+
+   }
 }
